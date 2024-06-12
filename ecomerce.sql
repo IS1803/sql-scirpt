@@ -20,15 +20,15 @@ CREATE TABLE Users (
     roleID INT,
     email VARCHAR(100) UNIQUE,
     password VARCHAR(100),
-    phone int UNIQUE CHECK (LEN(phone) = 9 OR LEN(phone) = 10),
-    status INT,
+    phone int UNIQUE,
+    status BIT,
     FOREIGN KEY (roleID) REFERENCES Roles(roleID)
 );
 GO
 
 -- Create Employees table
 CREATE TABLE Employees (
-    EmpID INT IDENTITY(1,1) PRIMARY KEY,
+    EmpID INT PRIMARY KEY,
     position VARCHAR(100),
     FOREIGN KEY (EmpID) REFERENCES Users(UserID)
 );
@@ -36,7 +36,7 @@ GO
 
 -- Create Customers table
 CREATE TABLE Customers (
-    CustID INT IDENTITY(1,1) PRIMARY KEY,
+    CustID INT PRIMARY KEY,
     points INT,
     birthday DATE,
     province_city VARCHAR(100),
@@ -51,7 +51,7 @@ GO
 CREATE TABLE Brands (
     BrandID INT IDENTITY(1,1) PRIMARY KEY,
     BrandName VARCHAR(100),
-    status INT
+    status BIT
 );
 GO
 
@@ -59,9 +59,9 @@ GO
 CREATE TABLE Products (
     ProductID INT IDENTITY(1,1) PRIMARY KEY,
     productName VARCHAR(100),
-    description NVARCHAR(256),
+    description TEXT,
     NumberOfPurchasing INT,
-    status INT,
+    status BIT,
     BrandID INT,
     FOREIGN KEY (BrandID) REFERENCES Brands(BrandID)
 );
@@ -76,7 +76,7 @@ CREATE TABLE ProductDetails (
     price DECIMAL(10, 2),
     importDate DATE,
     image VARCHAR(MAX),
-	status INT,
+	status BIT,
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 GO
@@ -114,7 +114,7 @@ GO
 -- Create Supports table
 CREATE TABLE Supports (
     SupportID INT IDENTITY(1,1) PRIMARY KEY,
-    status INT,
+    status BIT,
     requestDate DATE,
     requestMessage TEXT,
     CustID INT,
@@ -179,7 +179,7 @@ CREATE TABLE Promotions (
     startDate DATE,
     endDate DATE,
     discountPer DECIMAL(5, 2),
-    condition TEXT
+    condition INT
 );
 GO
 
@@ -245,7 +245,7 @@ CREATE TABLE Categories (
     CategoryID INT IDENTITY(1,1) PRIMARY KEY,
     CategoriesName VARCHAR(100),
     Description TEXT,
-    status INT
+    status BIT
 );
 GO
 
@@ -254,7 +254,7 @@ CREATE TABLE ChildrenCategories (
     CDCategoryID INT IDENTITY(1,1) PRIMARY KEY,
     CategoriesName VARCHAR(100),
     ParentID INT,
-    status INT,
+    status BIT,
     FOREIGN KEY (ParentID) REFERENCES Categories(CategoryID)
 );
 GO
@@ -302,27 +302,36 @@ INNER JOIN Users u ON c.CustID = u.UserID
 WHERE u.userName like '%%'
 
 
-INSERT INTO Roles (roleName) VALUES ('Admin');
-INSERT INTO Roles (roleName) VALUES ('Employee');
+INSERT INTO Roles (roleName) VALUES ('System Manager');
+INSERT INTO Roles (roleName) VALUES ('Shop Manager');
+INSERT INTO Roles (roleName) VALUES ('Shop Staff');
 INSERT INTO Roles (roleName) VALUES ('Customer');
 
+
 INSERT INTO Users (userName, roleID, email, password, phone, status) VALUES ('admin', 1, 'admin@gmail.com', '123', 123456789, 1);
-INSERT INTO Users (userName, roleID, email, password, phone, status) VALUES ('employee', 2, 'emp@gmail.com', '123', 987654321, 1);
-INSERT INTO Users (userName, roleID, email, password, phone, status) VALUES ('customer', 3, 'customer@gmail.com', '123', 1234567890, 1);
+INSERT INTO Users (userName, roleID, email, password, phone, status) VALUES ('manager', 2, 'manager@gmail.com', '123', 987654321, 1);
+INSERT INTO Users (userName, roleID, email, password, phone, status) VALUES ('employee', 3, 'employee@gmail.com', '123', 1234567890, 1);
+INSERT INTO Users (userName, roleID, email, password, phone, status) VALUES ('customer', 4, 'customer@gmail.com', '123', 1234467890, 1);
 
-INSERT INTO Employees (position) VALUES ('Manager');
-INSERT INTO Employees (position) VALUES ('Staff');
 
-INSERT INTO Customers (points, birthday, province_city, district, ward, detailAddress) VALUES (0, '2000-01-01', 'HCM', '1', 'Da Kao', '123 Nguyen Dinh Chieu');
-INSERT INTO Customers (points, birthday, province_city, district, ward, detailAddress) VALUES (0, '2000-01-01', 'HCM', '1', 'Da Kao', '123 Nguyen Dinh Chieu');
+INSERT INTO Employees (EmpID, position) VALUES (1,'Admin');
+INSERT INTO Employees (EmpID, position) VALUES (2, 'Manager');
+INSERT INTO Employees (EmpID, position) VALUES (3, 'Staff');
+
+INSERT INTO Customers (CustID, points, birthday, province_city, district, ward, detailAddress) VALUES (4,0, '2000-01-01', 'HCM', '1', 'Da Kao', '123 Nguyen Dinh Chieu');
+
+INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, condition) VALUES('SALE50', '2024-01-01', '2024-02-01', 50.00, 100);
+INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, condition) VALUES('SALE35', '2024-01-01', '2024-02-01', 35.00, 50);
 
 INSERT INTO Brands (BrandName, status) VALUES ('Adidas', 1);
 INSERT INTO Brands (BrandName, status) VALUES ('Nike', 1);
 INSERT INTO Brands (BrandName, status) VALUES ('Puma', 1);
 
-INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID) VALUES ('Processing', 100, '2021-01-01', 1, 1, 1);
+INSERT INTO [dbo].[Carts] ([totalPrice], [quantity],[CustID]) VALUES (0,0,4)
 
-INSERT INTO [Supports] (status, requestDate, requestMessage, CustID) VALUES (1, '2021-01-01', 'Help me', 1);
+INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID) VALUES ('Processing', 100, '2021-01-01', 4, 1, 1);
+
+INSERT INTO [Supports] (status, requestDate, requestMessage, CustID) VALUES (1, '2021-01-01', 'Help me', 4);
 -- ALTER TABLE Products
 -- ALTER COLUMN status int;
 -- ALTER TABLE Products
