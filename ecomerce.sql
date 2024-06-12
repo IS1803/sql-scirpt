@@ -1,9 +1,9 @@
 -- Drop the database if it exists and create a new one
-DROP DATABASE IF EXISTS ecommerce;
-CREATE DATABASE ecommerce;
+DROP DATABASE IF EXISTS github;
+CREATE DATABASE github;
 GO
 
-USE ecommerce;
+USE github;
 GO
 
 -- Create Roles table
@@ -21,7 +21,7 @@ CREATE TABLE Users (
     email VARCHAR(100) UNIQUE,
     password VARCHAR(100),
     phone int UNIQUE CHECK (LEN(phone) = 9 OR LEN(phone) = 10),
-    status BIT,
+    status INT,
     FOREIGN KEY (roleID) REFERENCES Roles(roleID)
 );
 GO
@@ -51,7 +51,7 @@ GO
 CREATE TABLE Brands (
     BrandID INT IDENTITY(1,1) PRIMARY KEY,
     BrandName VARCHAR(100),
-    status BIT
+    status INT
 );
 GO
 
@@ -59,9 +59,9 @@ GO
 CREATE TABLE Products (
     ProductID INT IDENTITY(1,1) PRIMARY KEY,
     productName VARCHAR(100),
-    description TEXT,
+    description NVARCHAR(256),
     NumberOfPurchasing INT,
-    status BIT,
+    status INT,
     BrandID INT,
     FOREIGN KEY (BrandID) REFERENCES Brands(BrandID)
 );
@@ -76,7 +76,7 @@ CREATE TABLE ProductDetails (
     price DECIMAL(10, 2),
     importDate DATE,
     image VARCHAR(MAX),
-	status BIT,
+	status INT,
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 GO
@@ -114,7 +114,7 @@ GO
 -- Create Supports table
 CREATE TABLE Supports (
     SupportID INT IDENTITY(1,1) PRIMARY KEY,
-    status BIT,
+    status INT,
     requestDate DATE,
     requestMessage TEXT,
     CustID INT,
@@ -245,7 +245,7 @@ CREATE TABLE Categories (
     CategoryID INT IDENTITY(1,1) PRIMARY KEY,
     CategoriesName VARCHAR(100),
     Description TEXT,
-    status BIT
+    status INT
 );
 GO
 
@@ -254,7 +254,7 @@ CREATE TABLE ChildrenCategories (
     CDCategoryID INT IDENTITY(1,1) PRIMARY KEY,
     CategoriesName VARCHAR(100),
     ParentID INT,
-    status BIT,
+    status INT,
     FOREIGN KEY (ParentID) REFERENCES Categories(CategoryID)
 );
 GO
@@ -294,6 +294,13 @@ SELECT * FROM Users;
 SELECT * FROM Employees;
 SELECT * FROM Customers c JOIN Users u ON c.CustID = u.UserID;
 SELECT * FROM Brands;
+SELECT * FROM Products;
+SELECT * FROM Supports WHERE CustID like '%%' OR status like '%%' OR SupportID like '%%' OR requestDate like '%%' OR requestMessage like '%%';
+SELECT *  FROM Supports s 
+INNER JOIN Customers c ON s.CustID = c.CustID
+INNER JOIN Users u ON c.CustID = u.UserID
+WHERE u.userName like '%%'
+
 
 INSERT INTO Roles (roleName) VALUES ('Admin');
 INSERT INTO Roles (roleName) VALUES ('Employee');
@@ -308,3 +315,15 @@ INSERT INTO Employees (position) VALUES ('Staff');
 
 INSERT INTO Customers (points, birthday, province_city, district, ward, detailAddress) VALUES (0, '2000-01-01', 'HCM', '1', 'Da Kao', '123 Nguyen Dinh Chieu');
 INSERT INTO Customers (points, birthday, province_city, district, ward, detailAddress) VALUES (0, '2000-01-01', 'HCM', '1', 'Da Kao', '123 Nguyen Dinh Chieu');
+
+INSERT INTO Brands (BrandName, status) VALUES ('Adidas', 1);
+INSERT INTO Brands (BrandName, status) VALUES ('Nike', 1);
+INSERT INTO Brands (BrandName, status) VALUES ('Puma', 1);
+
+INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID) VALUES ('Processing', 100, '2021-01-01', 1, 1, 1);
+
+INSERT INTO [Supports] (status, requestDate, requestMessage, CustID) VALUES (1, '2021-01-01', 'Help me', 1);
+-- ALTER TABLE Products
+-- ALTER COLUMN status int;
+-- ALTER TABLE Products
+-- ALTER COLUMN description nvarchar(255);
