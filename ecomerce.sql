@@ -73,7 +73,7 @@ CREATE TABLE ProductDetails (
     color VARCHAR(50),
     size VARCHAR(50),
     stockQuantity INT,
-    price DECIMAL(10, 2),
+    price INT,
     importDate DATE,
     image VARCHAR(MAX),
 	status BIT,
@@ -155,7 +155,7 @@ GO
 -- Create Carts table
 CREATE TABLE Carts (
     CartID INT IDENTITY(1,1) PRIMARY KEY,
-    totalPrice DECIMAL(10, 2),
+    totalPrice INT,
     quantity INT,
     CustID INT UNIQUE,
     FOREIGN KEY (CustID) REFERENCES Customers(CustID)
@@ -187,7 +187,7 @@ GO
 CREATE TABLE Orders (
     OrderID INT IDENTITY(1,1) PRIMARY KEY,
     status VARCHAR(100),
-    total DECIMAL(10, 2),
+    total INT,
     orderDate DATE,
     CustID INT,
     promotionID INT,
@@ -203,7 +203,7 @@ CREATE TABLE OrderDetails (
     OrderID INT,
     ProductID INT,
     quantity INT,
-    unitPrice DECIMAL(10, 2),
+    unitPrice INT,
     PRIMARY KEY (OrderID, ProductID),
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
