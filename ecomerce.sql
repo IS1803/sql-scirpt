@@ -332,6 +332,11 @@ INSERT INTO [dbo].[Carts] ([totalPrice], [quantity],[CustID]) VALUES (0,0,4)
 INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID) VALUES ('Processing', 100, '2021-01-01', 4, 1, 1);
 
 INSERT INTO [Supports] (status, requestDate, requestMessage, CustID) VALUES (1, '2021-01-01', 'Help me', 4);
+
+
+INSERT INTO Products (productName, description, NumberOfPurchasing, status, BrandID) VALUES ('Shoes', 'Good', 0, 1, 1);
+INSERT INTO OrderDetails (orderID, productID, quantity, unitPrice) VALUES (1, 1, 1, 100) 
+
 -- ALTER TABLE Products
 -- ALTER COLUMN status int;
 -- ALTER TABLE Products
