@@ -21,7 +21,7 @@ CREATE TABLE Users (
     email VARCHAR(100) UNIQUE,
     password VARCHAR(100),
     phone int UNIQUE,
-    status BIT,
+    status INT,
     FOREIGN KEY (roleID) REFERENCES Roles(roleID)
 );
 GO
@@ -51,7 +51,7 @@ GO
 CREATE TABLE Brands (
     BrandID INT IDENTITY(1,1) PRIMARY KEY,
     BrandName VARCHAR(100),
-    status BIT
+    status INT
 );
 GO
 
@@ -61,7 +61,7 @@ CREATE TABLE Products (
     productName VARCHAR(100),
     description TEXT,
     NumberOfPurchasing INT,
-    status BIT,
+    status INT,
     BrandID INT,
     FOREIGN KEY (BrandID) REFERENCES Brands(BrandID)
 );
@@ -76,7 +76,7 @@ CREATE TABLE ProductDetails (
     price INT,
     importDate DATE,
     image VARCHAR(MAX),
-	status BIT,
+	status INT,
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 GO
@@ -114,7 +114,7 @@ GO
 -- Create Supports table
 CREATE TABLE Supports (
     SupportID INT IDENTITY(1,1) PRIMARY KEY,
-    status BIT,
+    status INT,
     requestDate DATE,
     requestMessage TEXT,
     CustID INT,
@@ -245,7 +245,7 @@ CREATE TABLE Categories (
     CategoryID INT IDENTITY(1,1) PRIMARY KEY,
     CategoriesName VARCHAR(100),
     Description TEXT,
-    status BIT
+    status INT
 );
 GO
 
@@ -254,7 +254,7 @@ CREATE TABLE ChildrenCategories (
     CDCategoryID INT IDENTITY(1,1) PRIMARY KEY,
     CategoriesName VARCHAR(100),
     ParentID INT,
-    status BIT,
+    status INT,
     FOREIGN KEY (ParentID) REFERENCES Categories(CategoryID)
 );
 GO
