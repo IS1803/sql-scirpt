@@ -47,6 +47,16 @@ CREATE TABLE Customers (
 );
 GO
 
+CREATE TABLE ForgetPassword (
+    ResetID INT IDENTITY(1,1) PRIMARY KEY,
+    UserID INT,
+    token VARCHAR(100),
+    expiredDate DATE,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    tokenStatus INT
+);
+GO  
+
 -- Create Brands table
 CREATE TABLE Brands (
     BrandID INT IDENTITY(1,1) PRIMARY KEY,
@@ -289,6 +299,8 @@ CREATE TABLE ProductBelongtoCDCategories (
 );
 GO
 
+
+
 SELECT * FROM Roles;
 SELECT * FROM Users;
 SELECT * FROM Employees;
@@ -300,6 +312,32 @@ SELECT *  FROM Supports s
 INNER JOIN Customers c ON s.CustID = c.CustID
 INNER JOIN Users u ON c.CustID = u.UserID
 WHERE u.userName like '%%'
+
+SELECT * FROM Supports s 
+INNER JOIN Customers c ON s.CustID = c.CustID
+INNER JOIN Users u ON c.CustID = u.UserID
+WHERE s.SupportID = 1;
+SELECT * FROM Promotions;
+SELECT * FROM Orders;
+SELECT * FROM OrderDetails;
+SELECT * FROM Categories;
+SELECT * FROM ChildrenCategories;
+SELECT * FROM ProductBelongtoCategories;
+SELECT * FROM ProductBelongtoCDCategories;
+SELECT * FROM ManageCategories;
+SELECT * FROM ManageBrands;
+SELECT * FROM ManagePromotions;
+SELECT * FROM ManageOrders;
+SELECT * FROM WishlistDetails;
+SELECT * FROM Wishlists;
+SELECT * FROM CartDetails;
+SELECT * FROM Carts;
+SELECT * FROM ProductDetails;
+SELECT * FROM OverseeProducts;
+SELECT * FROM SuperviseEmployees;
+SELECT * FROM SuperviseCustomers;
+SELECT * FROM ProcessSupports;
+
 
 
 INSERT INTO Roles (roleName) VALUES ('System Manager');
@@ -322,20 +360,28 @@ INSERT INTO Customers (CustID, points, birthday, province_city, district, ward, 
 
 INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, condition) VALUES('SALE50', '2024-01-01', '2024-02-01', 50.00, 100);
 INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, condition) VALUES('SALE35', '2024-01-01', '2024-02-01', 35.00, 50);
+INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, condition) VALUES('NOSALE', '2024-01-01', '2024-02-01', 0, 0);
 
 INSERT INTO Brands (BrandName, status) VALUES ('Adidas', 1);
 INSERT INTO Brands (BrandName, status) VALUES ('Nike', 1);
 INSERT INTO Brands (BrandName, status) VALUES ('Puma', 1);
 
+INSERT INTO  ProcessSupports (EmpID, SupportID, responseMessage, responseDate) VALUES (3, 1, 'I will help you', GETDATE());
+DELETE FROM ProcessSupports WHERE EmpID = 3 AND SupportID = 1;
+
+INSERT INTO Carts (totalPrice, quantity, CustID) VALUES (0,0,4);
+
 INSERT INTO [dbo].[Carts] ([totalPrice], [quantity],[CustID]) VALUES (0,0,4)
 
-INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID) VALUES ('Processing', 100, '2021-01-01', 4, 1, 1);
+INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID) VALUES (1, 100, '2021-01-01', 4, 3 , 1);
 
 INSERT INTO [Supports] (status, requestDate, requestMessage, CustID) VALUES (1, '2021-01-01', 'Help me', 4);
 
 
 INSERT INTO Products (productName, description, NumberOfPurchasing, status, BrandID) VALUES ('Shoes', 'Good', 0, 1, 1);
-INSERT INTO OrderDetails (orderID, productID, quantity, unitPrice) VALUES (1, 1, 1, 100) 
+INSERT INTO OrderDetails (orderID, productID, quantity, unitPrice) VALUES (2, 2, 1, 100) 
+
+UPDATE Orders SET status = 0 WHERE OrderID = 1
 
 -- ALTER TABLE Products
 -- ALTER COLUMN status int;
