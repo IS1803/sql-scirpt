@@ -29,7 +29,6 @@ GO
 -- Create Employees table
 CREATE TABLE Employees (
     EmpID INT PRIMARY KEY,
-    position VARCHAR(100),
     FOREIGN KEY (EmpID) REFERENCES Users(UserID)
 );
 GO
@@ -352,9 +351,9 @@ INSERT INTO Users (userName, roleID, email, password, phone, status) VALUES ('em
 INSERT INTO Users (userName, roleID, email, password, phone, status) VALUES ('customer', 4, 'customer@gmail.com', '123', 1234467890, 1);
 
 
-INSERT INTO Employees (EmpID, position) VALUES (1,'Admin');
-INSERT INTO Employees (EmpID, position) VALUES (2, 'Manager');
-INSERT INTO Employees (EmpID, position) VALUES (3, 'Staff');
+INSERT INTO Employees (EmpID) VALUES (1);
+INSERT INTO Employees (EmpID) VALUES (2);
+INSERT INTO Employees (EmpID) VALUES (3);
 
 INSERT INTO Customers (CustID, points, birthday, province_city, district, ward, detailAddress) VALUES (4,0, '2000-01-01', 'HCM', '1', 'Da Kao', '123 Nguyen Dinh Chieu');
 
@@ -366,6 +365,8 @@ INSERT INTO Brands (BrandName, status) VALUES ('Adidas', 1);
 INSERT INTO Brands (BrandName, status) VALUES ('Nike', 1);
 INSERT INTO Brands (BrandName, status) VALUES ('Puma', 1);
 
+INSERT INTO [Supports] (status, requestDate, requestMessage, CustID) VALUES (1, '2021-01-01', 'Help me', 4);
+
 INSERT INTO  ProcessSupports (EmpID, SupportID, responseMessage, responseDate) VALUES (3, 1, 'I will help you', GETDATE());
 DELETE FROM ProcessSupports WHERE EmpID = 3 AND SupportID = 1;
 
@@ -374,9 +375,6 @@ INSERT INTO Carts (totalPrice, quantity, CustID) VALUES (0,0,4);
 INSERT INTO [dbo].[Carts] ([totalPrice], [quantity],[CustID]) VALUES (0,0,4)
 
 INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID) VALUES (1, 100, '2021-01-01', 4, 3 , 1);
-
-INSERT INTO [Supports] (status, requestDate, requestMessage, CustID) VALUES (1, '2021-01-01', 'Help me', 4);
-
 
 INSERT INTO Products (productName, description, NumberOfPurchasing, status, BrandID) VALUES ('Shoes', 'Good', 0, 1, 1);
 INSERT INTO OrderDetails (orderID, productID, quantity, unitPrice) VALUES (2, 2, 1, 100) 
