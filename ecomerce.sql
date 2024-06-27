@@ -78,7 +78,8 @@ GO
 
 -- Create ProductDetails table
 CREATE TABLE ProductDetails (
-    ProductID INT PRIMARY KEY,
+    ProductDetailsID INT PRIMARY KEY,
+	ProductID INT,
     color VARCHAR(50),
     size VARCHAR(50),
     stockQuantity INT,
@@ -175,9 +176,13 @@ GO
 CREATE TABLE CartDetails (
     CartID INT,
     ProductID INT,
+	ProductDetailsID INT,
+	quantity INT,
+	price INT,
     PRIMARY KEY (CartID, ProductID),
     FOREIGN KEY (CartID) REFERENCES Carts(CartID),
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+	FOREIGN KEY (ProductDetailsID) REFERENCES ProductDetails(ProductDetailsID)
 );
 GO
 
