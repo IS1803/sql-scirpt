@@ -166,7 +166,6 @@ GO
 CREATE TABLE Carts (
     CartID INT IDENTITY(1,1) PRIMARY KEY,
     totalPrice INT,
-    quantity INT,
     CustID INT UNIQUE,
     FOREIGN KEY (CustID) REFERENCES Customers(CustID)
 );
@@ -179,7 +178,7 @@ CREATE TABLE CartDetails (
 	ProductDetailsID INT,
 	quantity INT,
 	price INT,
-    PRIMARY KEY (CartID, ProductID),
+    PRIMARY KEY (CartID, ProductID, ProductDetailsID),
     FOREIGN KEY (CartID) REFERENCES Carts(CartID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
 	FOREIGN KEY (ProductDetailsID) REFERENCES ProductDetails(ProductDetailsID)
