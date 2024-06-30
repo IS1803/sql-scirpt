@@ -166,7 +166,6 @@ GO
 CREATE TABLE Carts (
     CartID INT IDENTITY(1,1) PRIMARY KEY,
     totalPrice DECIMAL(10, 2), --CHange totalPrice from int to Decimal
-    quantity INT,
     CustID INT UNIQUE,
     FOREIGN KEY (CustID) REFERENCES Customers(CustID)
 );
