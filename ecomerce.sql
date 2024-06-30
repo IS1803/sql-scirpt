@@ -29,6 +29,7 @@ GO
 -- Create Employees table
 CREATE TABLE Employees (
     EmpID INT PRIMARY KEY,
+    position VARCHAR(100),
     FOREIGN KEY (EmpID) REFERENCES Users(UserID)
 );
 GO
@@ -165,7 +166,8 @@ GO
 -- Create Carts table
 CREATE TABLE Carts (
     CartID INT IDENTITY(1,1) PRIMARY KEY,
-    totalPrice INT,
+    totalPrice DECIMAL(10, 2), --CHange totalPrice from int to Decimal
+    quantity INT,
     CustID INT UNIQUE,
     FOREIGN KEY (CustID) REFERENCES Customers(CustID)
 );
@@ -199,12 +201,18 @@ GO
 -- Create Orders table
 CREATE TABLE Orders (
     OrderID INT IDENTITY(1,1) PRIMARY KEY,
-    status VARCHAR(100),
-    total INT,
+    status INT,
+    total DECIMAL(10, 2), --CHange to decimal from int to store price
     orderDate DATE,
     CustID INT,
     promotionID INT,
     CartID INT,
+    userName VARCHAR(100),
+    city VARCHAR(100), 
+    district VARCHAR(100),
+    ward VARCHAR(100),
+    address VARCHAR(100),
+    phone INT,
     FOREIGN KEY (CustID) REFERENCES Customers(CustID),
     FOREIGN KEY (promotionID) REFERENCES Promotions(PromotionID),
     FOREIGN KEY (CartID) REFERENCES Carts(CartID)
@@ -302,7 +310,7 @@ CREATE TABLE ProductBelongtoCDCategories (
 );
 GO
 
-
+DELETE From Users where UserID = 5;
 
 SELECT * FROM Roles;
 SELECT * FROM Users;
@@ -340,7 +348,8 @@ SELECT * FROM OverseeProducts;
 SELECT * FROM SuperviseEmployees;
 SELECT * FROM SuperviseCustomers;
 SELECT * FROM ProcessSupports;
-
+SELECT * FROM ForgetPassword;
+SELECT * FROM ForgetPassword WHERE token = '26c77a61-0541-4d57-b6cc-afbb56b9d50f' AND expiredDate > GETDATE() AND tokenStatus = 1
 
 
 INSERT INTO Roles (roleName) VALUES ('System Manager');
@@ -355,9 +364,9 @@ INSERT INTO Users (userName, roleID, email, password, phone, status) VALUES ('em
 INSERT INTO Users (userName, roleID, email, password, phone, status) VALUES ('customer', 4, 'customer@gmail.com', '123', 1234467890, 1);
 
 
-INSERT INTO Employees (EmpID) VALUES (1);
-INSERT INTO Employees (EmpID) VALUES (2);
-INSERT INTO Employees (EmpID) VALUES (3);
+INSERT INTO Employees (EmpID, position) VALUES (1,'Admin');
+INSERT INTO Employees (EmpID, position) VALUES (2, 'Manager');
+INSERT INTO Employees (EmpID, position) VALUES (3, 'Staff');
 
 INSERT INTO Customers (CustID, points, birthday, province_city, district, ward, detailAddress) VALUES (4,0, '2000-01-01', 'HCM', '1', 'Da Kao', '123 Nguyen Dinh Chieu');
 
@@ -369,8 +378,6 @@ INSERT INTO Brands (BrandName, status) VALUES ('Adidas', 1);
 INSERT INTO Brands (BrandName, status) VALUES ('Nike', 1);
 INSERT INTO Brands (BrandName, status) VALUES ('Puma', 1);
 
-INSERT INTO [Supports] (status, requestDate, requestMessage, CustID) VALUES (1, '2021-01-01', 'Help me', 4);
-
 INSERT INTO  ProcessSupports (EmpID, SupportID, responseMessage, responseDate) VALUES (3, 1, 'I will help you', GETDATE());
 DELETE FROM ProcessSupports WHERE EmpID = 3 AND SupportID = 1;
 
@@ -379,6 +386,9 @@ INSERT INTO Carts (totalPrice, quantity, CustID) VALUES (0,0,4);
 INSERT INTO [dbo].[Carts] ([totalPrice], [quantity],[CustID]) VALUES (0,0,4)
 
 INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID) VALUES (1, 100, '2021-01-01', 4, 3 , 1);
+
+INSERT INTO [Supports] (status, requestDate, requestMessage, CustID) VALUES (1, '2021-01-01', 'Help me', 4);
+
 
 INSERT INTO Products (productName, description, NumberOfPurchasing, status, BrandID) VALUES ('Shoes', 'Good', 0, 1, 1);
 INSERT INTO OrderDetails (orderID, productID, quantity, unitPrice) VALUES (2, 2, 1, 100) 
@@ -389,3 +399,23 @@ UPDATE Orders SET status = 0 WHERE OrderID = 1
 -- ALTER COLUMN status int;
 -- ALTER TABLE Products
 -- ALTER COLUMN description nvarchar(255);
+SELECT * FROM ForgetPassword WHERE token = '3c9894b9-6266-4f3d-9dbf-272a70c2ac12' AND expiredDate > GETDATE() AND tokenStatus = 1
+SELECT TOP 1 * FROM ForgetPassword WHERE userID = 8 AND tokenStatus = 1 ORDER BY ResetID DESC 
+SELECT * FROM Users
+
+SELECT* FROM ForgetPassword
+
+SELECT SUM(c.quantity * pd.price) FROM Carts c 
+INNER JOIN CartDetails cd ON cd.CartID = c.CartID
+INNER JOIN Products p ON p.ProductID = cd.ProductID
+INNER JOIN ProductDetails pd ON pd.ProductID = p.ProductID
+WHERE c.CartID = 
+SELECT * FROM ProcessSupports WHERE supportID = 1
+
+INSERT INTO Carts()
+SELECT * FROM Users
+INSERT INTO Supports (status, requestDate, requestMessage, CustID) VALUES (0, '2021-01-01', 'Help me', 4);
+SELECT *  FROM Supports s 
+INNER JOIN Customers c ON s.CustID = c.CustID
+INNER JOIN Users u ON c.CustID = u.UserID
+WHERE u.userName like '%%'
