@@ -29,7 +29,6 @@ GO
 -- Create Employees table
 CREATE TABLE Employees (
     EmpID INT PRIMARY KEY,
-    position VARCHAR(100),
     FOREIGN KEY (EmpID) REFERENCES Users(UserID)
 );
 GO
