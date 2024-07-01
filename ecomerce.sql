@@ -96,6 +96,9 @@ GO
 CREATE TABLE OverseeProducts (
     EmpID INT,
     ProductID INT,
+	FieldOld VARCHAR(20),
+	[Action] VARCHAR(20),
+	FieldNew VARCHAR(20),
     PRIMARY KEY (EmpID, ProductID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
@@ -106,6 +109,9 @@ GO
 CREATE TABLE SuperviseEmployees (
     EmpID INT,
     SupervisorID INT,
+	FieldOld VARCHAR(20),
+	[Action] VARCHAR(20),
+	FieldNew VARCHAR(20),
     PRIMARY KEY (EmpID, SupervisorID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (SupervisorID) REFERENCES Employees(EmpID)
@@ -116,6 +122,9 @@ GO
 CREATE TABLE SuperviseCustomers (
     EmpID INT,
     CustID INT,
+	FieldOld VARCHAR(20),
+	[Action] VARCHAR(20),
+	FieldNew VARCHAR(20),
     PRIMARY KEY (EmpID, CustID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (CustID) REFERENCES Customers(CustID)
@@ -141,6 +150,9 @@ CREATE TABLE ProcessSupports (
     responseMessage VARCHAR(100),
 	title varchar(100),
     responseDate DATE,
+	FieldOld VARCHAR(20),
+	[Action] VARCHAR(20),
+	FieldNew VARCHAR(20),
     PRIMARY KEY (EmpID, SupportID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (SupportID) REFERENCES Supports(SupportID)
@@ -239,6 +251,9 @@ GO
 CREATE TABLE ManageOrders (
     OrderID INT,
     EmpID INT,
+	FieldOld VARCHAR(20),
+	[Action] VARCHAR(20),
+	FieldNew VARCHAR(20),
     PRIMARY KEY (OrderID, EmpID),
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID)
@@ -249,6 +264,9 @@ GO
 CREATE TABLE ManagePromotions (
     PromotionID INT,
     EmpID INT,
+	FieldOld VARCHAR(20),
+	[Action] VARCHAR(20),
+	FieldNew VARCHAR(20),
     PRIMARY KEY (PromotionID, EmpID),
     FOREIGN KEY (PromotionID) REFERENCES Promotions(PromotionID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID)
@@ -259,6 +277,9 @@ GO
 CREATE TABLE ManageBrands (
     BrandID INT,
     EmpID INT,
+	FieldOld VARCHAR(20),
+	[Action] VARCHAR(20),
+	FieldNew VARCHAR(20),
     PRIMARY KEY (BrandID, EmpID),
     FOREIGN KEY (BrandID) REFERENCES Brands(BrandID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID)
@@ -289,6 +310,9 @@ GO
 CREATE TABLE ManageCategories (
     Categories INT,
     EmpID INT,
+	FieldOld VARCHAR(20),
+	[Action] VARCHAR(20),
+	FieldNew VARCHAR(20),
     PRIMARY KEY (Categories, EmpID),
     FOREIGN KEY (Categories) REFERENCES Categories(CategoryID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID)
