@@ -60,6 +60,7 @@ GO
 CREATE TABLE Brands (
     BrandID INT IDENTITY(1,1) PRIMARY KEY,
     BrandName VARCHAR(100),
+	image VARCHAR(MAX),
     status INT
 );
 GO
@@ -68,7 +69,7 @@ GO
 CREATE TABLE Products (
     ProductID INT IDENTITY(1,1) PRIMARY KEY,
     productName VARCHAR(100),
-    description TEXT,
+    description VARCHAR(100),
     NumberOfPurchasing INT,
     status INT,
     BrandID INT,
@@ -125,8 +126,9 @@ GO
 CREATE TABLE Supports (
     SupportID INT IDENTITY(1,1) PRIMARY KEY,
     status INT,
+	title varchar(100),
     requestDate DATE,
-    requestMessage TEXT,
+    requestMessage VARCHAR(100),
     CustID INT,
     FOREIGN KEY (CustID) REFERENCES Customers(CustID)
 );
@@ -136,7 +138,8 @@ GO
 CREATE TABLE ProcessSupports (
     EmpID INT,
     SupportID INT,
-    responseMessage TEXT,
+    responseMessage VARCHAR(100),
+	title varchar(100),
     responseDate DATE,
     PRIMARY KEY (EmpID, SupportID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
@@ -192,7 +195,10 @@ CREATE TABLE Promotions (
     startDate DATE,
     endDate DATE,
     discountPer DECIMAL(5, 2),
-    condition INT
+	description varchar(100),
+	image VARCHAR(MAX),
+    condition INT,
+	status INT
 );
 GO
 
@@ -263,7 +269,8 @@ GO
 CREATE TABLE Categories (
     CategoryID INT IDENTITY(1,1) PRIMARY KEY,
     CategoriesName VARCHAR(100),
-    Description TEXT,
+    Description VARCHAR(100),
+	image VARCHAR(MAX),
     status INT
 );
 GO
@@ -362,21 +369,23 @@ INSERT INTO Users (userName, roleID, email, password, phone, status) VALUES ('em
 INSERT INTO Users (userName, roleID, email, password, phone, status) VALUES ('customer', 4, 'customer@gmail.com', '123', 1234467890, 1);
 
 
-INSERT INTO Employees (EmpID, position) VALUES (1,'Admin');
-INSERT INTO Employees (EmpID, position) VALUES (2, 'Manager');
-INSERT INTO Employees (EmpID, position) VALUES (3, 'Staff');
+INSERT INTO Employees (EmpID) VALUES (1);
+INSERT INTO Employees (EmpID) VALUES (2);
+INSERT INTO Employees (EmpID) VALUES (3);
 
 INSERT INTO Customers (CustID, points, birthday, province_city, district, ward, detailAddress) VALUES (4,0, '2000-01-01', 'HCM', '1', 'Da Kao', '123 Nguyen Dinh Chieu');
 
-INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, condition) VALUES('SALE50', '2024-01-01', '2024-02-01', 50.00, 100);
-INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, condition) VALUES('SALE35', '2024-01-01', '2024-02-01', 35.00, 50);
-INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, condition) VALUES('NOSALE', '2024-01-01', '2024-02-01', 0, 0);
+INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, description, condition) VALUES('SALE50', '2024-01-01', '2024-02-01', 50.00,'Happy Sale', 100);
+INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, description, condition) VALUES('SALE35', '2024-01-01', '2024-02-01', 35.00,'Happy Sale', 50);
+INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, description, condition) VALUES('NOSALE', '2024-01-01', '2024-02-01', 0,'Sad No Sale' 0);
 
 INSERT INTO Brands (BrandName, status) VALUES ('Adidas', 1);
 INSERT INTO Brands (BrandName, status) VALUES ('Nike', 1);
 INSERT INTO Brands (BrandName, status) VALUES ('Puma', 1);
 
-INSERT INTO  ProcessSupports (EmpID, SupportID, responseMessage, responseDate) VALUES (3, 1, 'I will help you', GETDATE());
+INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 4);
+
+INSERT INTO  ProcessSupports (EmpID, SupportID, title, responseMessage, responseDate) VALUES (3, 2,'SHOP REPLY YOUR SUPPORT', 'I will help you', GETDATE());
 DELETE FROM ProcessSupports WHERE EmpID = 3 AND SupportID = 1;
 
 INSERT INTO Carts (totalPrice, quantity, CustID) VALUES (0,0,4);
@@ -384,9 +393,6 @@ INSERT INTO Carts (totalPrice, quantity, CustID) VALUES (0,0,4);
 INSERT INTO [dbo].[Carts] ([totalPrice], [quantity],[CustID]) VALUES (0,0,4)
 
 INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID) VALUES (1, 100, '2021-01-01', 4, 3 , 1);
-
-INSERT INTO [Supports] (status, requestDate, requestMessage, CustID) VALUES (1, '2021-01-01', 'Help me', 4);
-
 
 INSERT INTO Products (productName, description, NumberOfPurchasing, status, BrandID) VALUES ('Shoes', 'Good', 0, 1, 1);
 INSERT INTO OrderDetails (orderID, productID, quantity, unitPrice) VALUES (2, 2, 1, 100) 
