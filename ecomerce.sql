@@ -193,6 +193,7 @@ CREATE TABLE CartDetails (
 	ProductDetailsID INT,
 	quantity INT,
 	price INT,
+    status INT,
     PRIMARY KEY (CartID, ProductID, ProductDetailsID),
     FOREIGN KEY (CartID) REFERENCES Carts(CartID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
