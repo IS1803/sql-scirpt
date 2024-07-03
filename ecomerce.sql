@@ -409,15 +409,23 @@ INSERT INTO Brands (BrandName, status) VALUES ('Nike', 1);
 INSERT INTO Brands (BrandName, status) VALUES ('Puma', 1);
 
 INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 4);
+INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (0,'HELP', '2021-01-01', 'Help me', 7);
+INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (0,'HELP', '2021-01-01', 'Help me', 7);
+INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (0,'HELP', '2021-01-01', 'Help me', 7);
+INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 7);
+INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 7);
+INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 7);
+INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 7);
+INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 7);
+DELETE FROM Supports
 
-INSERT INTO  ProcessSupports (EmpID, SupportID, title, responseMessage, responseDate) VALUES (3, 2,'SHOP REPLY YOUR SUPPORT', 'I will help you', GETDATE());
+INSERT INTO  ProcessSupports (EmpID, SupportID, title, responseMessage, responseDate) VALUES (3, 25,'SHOP REPLY YOUR SUPPORT', 'I will help you', GETDATE());
 DELETE FROM ProcessSupports WHERE EmpID = 3 AND SupportID = 1;
 
-INSERT INTO Carts (totalPrice, quantity, CustID) VALUES (0,0,4);
+INSERT INTO Carts (totalPrice, CustID) VALUES (0,7);
 
-INSERT INTO [dbo].[Carts] ([totalPrice], [quantity],[CustID]) VALUES (0,0,4)
-
-INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID) VALUES (1, 100, '2021-01-01', 4, 3 , 1);
+INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userName, city, district, ward, address, phone) 
+			VALUES (3, 100, '2021-01-01', 7, 3 , 1, 'Nhu','HCM','1','ben nghe','111','0123456787');
 
 INSERT INTO Products (productName, description, NumberOfPurchasing, status, BrandID) VALUES ('Shoes', 'Good', 0, 1, 1);
 INSERT INTO OrderDetails (orderID, productID, quantity, unitPrice) VALUES (2, 2, 1, 100) 
