@@ -79,7 +79,7 @@ GO
 
 -- Create ProductDetails table
 CREATE TABLE ProductDetails (
-    ProductDetailsID INT PRIMARY KEY,
+    ProductDetailsID INT IDENTITY(1,1) PRIMARY KEY,
 	ProductID INT,
     color VARCHAR(50),
     size VARCHAR(50),
@@ -171,16 +171,18 @@ GO
 CREATE TABLE WishlistDetails (
     WishlistID INT,
     ProductID INT,
-    PRIMARY KEY (WishlistID, ProductID),
+	ProductDetailsID INT,
+    PRIMARY KEY (WishlistID, ProductID, ProductDetailsID),
     FOREIGN KEY (WishlistID) REFERENCES Wishlists(WishlistID),
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+	FOREIGN KEY (ProductDetailsID) REFERENCES ProductDetails(ProductDetailsID),
 );
 GO
 
 -- Create Carts table
 CREATE TABLE Carts (
     CartID INT IDENTITY(1,1) PRIMARY KEY,
-    totalPrice DECIMAL(10, 2), --CHange totalPrice from int to Decimal
+    totalPrice DECIMAL(10, 2), 
     status INT,
     CustID INT UNIQUE,
     FOREIGN KEY (CustID) REFERENCES Customers(CustID)
@@ -219,7 +221,7 @@ GO
 CREATE TABLE Orders (
     OrderID INT IDENTITY(1,1) PRIMARY KEY,
     status INT,
-    total DECIMAL(10, 2), --CHange to decimal from int to store price
+    total DECIMAL(10, 2),
     orderDate DATE,
     CustID INT,
     promotionID INT,
@@ -230,6 +232,7 @@ CREATE TABLE Orders (
     ward VARCHAR(100),
     address VARCHAR(100),
     phone INT,
+	note VARCHAR(100),
     FOREIGN KEY (CustID) REFERENCES Customers(CustID),
     FOREIGN KEY (promotionID) REFERENCES Promotions(PromotionID),
     FOREIGN KEY (CartID) REFERENCES Carts(CartID)
@@ -240,11 +243,13 @@ GO
 CREATE TABLE OrderDetails (
     OrderID INT,
     ProductID INT,
+	ProductDetailsID INT,
     quantity INT,
     unitPrice INT,
-    PRIMARY KEY (OrderID, ProductID),
+    PRIMARY KEY (OrderID, ProductID,ProductDetailsID),
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+	FOREIGN KEY (ProductDetailsID) REFERENCES ProductDetails(ProductDetailsID)
 );
 GO
 
@@ -260,6 +265,7 @@ CREATE TABLE ManageOrders (
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID)
 );
 GO
+
 
 -- Create ManagePromotions table
 CREATE TABLE ManagePromotions (
@@ -348,6 +354,7 @@ SELECT * FROM Employees;
 SELECT * FROM Customers c JOIN Users u ON c.CustID = u.UserID;
 SELECT * FROM Brands;
 SELECT * FROM Products;
+SELECT * FROM ProductDetails;
 SELECT * FROM Supports WHERE CustID like '%%' OR status like '%%' OR SupportID like '%%' OR requestDate like '%%' OR requestMessage like '%%';
 SELECT *  FROM Supports s 
 INNER JOIN Customers c ON s.CustID = c.CustID
@@ -373,14 +380,12 @@ SELECT * FROM WishlistDetails;
 SELECT * FROM Wishlists;
 SELECT * FROM CartDetails;
 SELECT * FROM Carts;
-SELECT * FROM ProductDetails;
 SELECT * FROM OverseeProducts;
 SELECT * FROM SuperviseEmployees;
 SELECT * FROM SuperviseCustomers;
 SELECT * FROM ProcessSupports;
 SELECT * FROM ForgetPassword;
 SELECT * FROM ForgetPassword WHERE token = '26c77a61-0541-4d57-b6cc-afbb56b9d50f' AND expiredDate > GETDATE() AND tokenStatus = 1
-
 
 INSERT INTO Roles (roleName) VALUES ('System Manager');
 INSERT INTO Roles (roleName) VALUES ('Shop Manager');
@@ -398,37 +403,34 @@ INSERT INTO Employees (EmpID) VALUES (1);
 INSERT INTO Employees (EmpID) VALUES (2);
 INSERT INTO Employees (EmpID) VALUES (3);
 
-INSERT INTO Customers (CustID, points, birthday, province_city, district, ward, detailAddress) VALUES (4,0, '2000-01-01', 'HCM', '1', 'Da Kao', '123 Nguyen Dinh Chieu');
+INSERT INTO Customers (CustID, points, birthday, province_city, district, ward, detailAddress) VALUES (2,0, '2000-01-01', 'HCM', '1', 'Da Kao', '123 Nguyen Dinh Chieu');
 
 INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, description, condition) VALUES('SALE50', '2024-01-01', '2024-02-01', 50.00,'Happy Sale', 100);
 INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, description, condition) VALUES('SALE35', '2024-01-01', '2024-02-01', 35.00,'Happy Sale', 50);
-INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, description, condition) VALUES('NOSALE', '2024-01-01', '2024-02-01', 0,'Sad No Sale' 0);
+INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, description, condition) VALUES('NOSALE', '2024-01-01', '2024-02-01', 0,'Sad No Sale' ,0);
 
 INSERT INTO Brands (BrandName, status) VALUES ('Adidas', 1);
 INSERT INTO Brands (BrandName, status) VALUES ('Nike', 1);
 INSERT INTO Brands (BrandName, status) VALUES ('Puma', 1);
 
+INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (0,'HELP', '2021-01-01', 'Help me', 4);
 INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 4);
-INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (0,'HELP', '2021-01-01', 'Help me', 7);
-INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (0,'HELP', '2021-01-01', 'Help me', 7);
-INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (0,'HELP', '2021-01-01', 'Help me', 7);
-INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 7);
-INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 7);
-INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 7);
-INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 7);
-INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 7);
-DELETE FROM Supports
 
-INSERT INTO  ProcessSupports (EmpID, SupportID, title, responseMessage, responseDate) VALUES (3, 25,'SHOP REPLY YOUR SUPPORT', 'I will help you', GETDATE());
+INSERT INTO  ProcessSupports (EmpID, SupportID, title, responseMessage, responseDate) VALUES (3, 1,'SHOP REPLY YOUR SUPPORT', 'I will help you', GETDATE());
 DELETE FROM ProcessSupports WHERE EmpID = 3 AND SupportID = 1;
 
-INSERT INTO Carts (totalPrice, CustID) VALUES (0,7);
+INSERT INTO Carts (totalPrice, CustID) VALUES (0,2);
 
-INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userName, city, district, ward, address, phone) 
-			VALUES (3, 100, '2021-01-01', 7, 3 , 1, 'Nhu','HCM','1','ben nghe','111','0123456787');
+INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userName, city, district, ward, address, phone, note) 
+			VALUES (3, 100, '2021-01-01', 2 , 3 , 3, 'Nhu','HCM','1','ben nghe','111','0123456787','chi giao gio hanh chinh');
+INSERT INTO OrderDetails (OrderID, ProductID, ProductDetailsID, quantity, unitPrice)
+VALUES (4, 2, 1, 2, 5000000)
 
-INSERT INTO Products (productName, description, NumberOfPurchasing, status, BrandID) VALUES ('Shoes', 'Good', 0, 1, 1);
-INSERT INTO OrderDetails (orderID, productID, quantity, unitPrice) VALUES (2, 2, 1, 100) 
+INSERT INTO Products (productName, description, NumberOfPurchasing, status, BrandID)
+VALUES ('Jordan', 'Good', 1000, 1, 1);
+INSERT INTO ProductDetails (ProductDetailsID, ProductID, color, size, stockQuantity, price, importDate, image, status)
+VALUES (2, 2, 'WHITE', '40', 100, 5000000, '2024-07-03', 'image1', 1)
+   
 
 UPDATE Orders SET status = 0 WHERE OrderID = 1
 
