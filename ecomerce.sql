@@ -79,7 +79,7 @@ GO
 
 -- Create ProductDetails table
 CREATE TABLE ProductDetails (
-    ProductDetailsID INT PRIMARY KEY,
+    ProductDetailsID INT IDENTITY(1,1) PRIMARY KEY,
 	ProductID INT,
     color VARCHAR(50),
     size VARCHAR(50),
@@ -172,10 +172,12 @@ GO
 CREATE TABLE WishlistDetails (
     WishlistID INT,
     ProductID INT,
+    ProductDetailsID INT, 
     status INT,
-    PRIMARY KEY (WishlistID, ProductID),
+    PRIMARY KEY (WishlistID, ProductID, ProductDetailsID),
     FOREIGN KEY (WishlistID) REFERENCES Wishlists(WishlistID),
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (ProductDetailsID) REFERENCES ProductDetails(ProductDetailsID),
 );
 GO
 
@@ -243,11 +245,13 @@ GO
 CREATE TABLE OrderDetails (
     OrderID INT,
     ProductID INT,
+    ProductDetailsID INT,
     quantity INT,
     unitPrice INT,
-    PRIMARY KEY (OrderID, ProductID),
+    PRIMARY KEY (OrderID, ProductID, ProductDetailsID),
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+    FOREIGN KEY (ProductDetailsID) REFERENCES ProductDetails(ProductDetailsID)
 );
 GO
 
