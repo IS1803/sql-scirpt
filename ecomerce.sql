@@ -38,10 +38,10 @@ CREATE TABLE Customers (
     CustID INT PRIMARY KEY,
     points INT,
     birthday DATE,
-    province_city VARCHAR(100),
-    district VARCHAR(100),
-    ward VARCHAR(100),
-    detailAddress VARCHAR(255),
+    province_city NVARCHAR(100),
+    district NVARCHAR(100),
+    ward NVARCHAR(100),
+    detailAddress NVARCHAR(255),
     FOREIGN KEY (CustID) REFERENCES Users(UserID)
 );
 GO
@@ -184,8 +184,10 @@ CREATE TABLE Carts (
     CartID INT IDENTITY(1,1) PRIMARY KEY,
     totalPrice DECIMAL(10, 2), --CHange totalPrice from int to Decimal
     status INT,
+	PromotionID INT,
     CustID INT UNIQUE,
-    FOREIGN KEY (CustID) REFERENCES Customers(CustID)
+    FOREIGN KEY (CustID) REFERENCES Customers(CustID),
+	FOREIGN KEY (promotionID) REFERENCES Promotions(PromotionID)
 );
 GO
 
@@ -346,24 +348,31 @@ GO
 DELETE From Users where UserID = 5;
 
 SELECT * FROM Roles;
-SELECT * FROM Users;
+
 SELECT * FROM Employees;
 SELECT * FROM Customers c JOIN Users u ON c.CustID = u.UserID;
 SELECT * FROM Brands;
+SELECT * FROM Users;
+SELECT * FROM Customers;
 SELECT * FROM Products;
+
+SELECT * FROM ProductDetails;
+SELECT * FROM CartDetails;
+SELECT * FROM Carts;
+SELECT * FROM Orders;
+SELECT * FROM OrderDetails;
 SELECT * FROM Supports WHERE CustID like '%%' OR status like '%%' OR SupportID like '%%' OR requestDate like '%%' OR requestMessage like '%%';
 SELECT *  FROM Supports s 
 INNER JOIN Customers c ON s.CustID = c.CustID
 INNER JOIN Users u ON c.CustID = u.UserID
 WHERE u.userName like '%%'
-
+SELECT * FROM Carts WHERE CustID = 8
 SELECT * FROM Supports s 
 INNER JOIN Customers c ON s.CustID = c.CustID
 INNER JOIN Users u ON c.CustID = u.UserID
 WHERE s.SupportID = 1;
 SELECT * FROM Promotions;
-SELECT * FROM Orders;
-SELECT * FROM OrderDetails;
+
 SELECT * FROM Categories;
 SELECT * FROM ChildrenCategories;
 SELECT * FROM ProductBelongtoCategories;
@@ -402,7 +411,8 @@ INSERT INTO Employees (EmpID) VALUES (1);
 INSERT INTO Employees (EmpID) VALUES (2);
 INSERT INTO Employees (EmpID) VALUES (3);
 
-INSERT INTO Customers (CustID, points, birthday, province_city, district, ward, detailAddress) VALUES (4,0, '2000-01-01', 'HCM', '1', 'Da Kao', '123 Nguyen Dinh Chieu');
+
+INSERT INTO Customers (CustID, points, birthday, province_city, district, ward, detailAddress) VALUES (5,0, '2000-01-01', 'HCM', '1', 'Da Kao', '123 Nguyen Dinh Chieu');
 
 INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, description, condition) VALUES('SALE50', '2024-01-01', '2024-02-01', 50.00,'Happy Sale', 100);
 INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, description, condition) VALUES('SALE35', '2024-01-01', '2024-02-01', 35.00,'Happy Sale', 50);
@@ -431,13 +441,20 @@ INSERT INTO Products (productName, description, NumberOfPurchasing, status, Bran
 INSERT INTO  ProcessSupports (EmpID, SupportID, title, responseMessage, responseDate) VALUES (3, 2,'SHOP REPLY YOUR SUPPORT', 'I will help you', GETDATE());
 DELETE FROM ProcessSupports WHERE EmpID = 3 AND SupportID = 1;
 
-INSERT INTO Carts (totalPrice, CustID) VALUES (0,7);
-SELECT * FROM Orders
-INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userName, city, district, ward, address, phone) 
-			VALUES (1, 100, '2021-01-01', 12, 3 , 2, 'Nhu','HCM','1','ben nghe','111','0123456787');
+INSERT INTO Carts (totalPrice, CustID) VALUES (10000,8);
+INSERT INTO CartDetails(CartID,ProductID,ProductDetailsID,quantity, price) VALUES (7,2,3,2,5000000),(7,2,4,1,5000000);
 
-INSERT INTO Products (productName, description, NumberOfPurchasing, status, BrandID) VALUES ('Shoes', 'Good', 0, 1, 1);
-INSERT INTO OrderDetails (orderID, productID, quantity, unitPrice) VALUES (2, 2, 1, 100) 
+INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userName, city, district, ward, address, phone, note) 
+			VALUES (1, 100, '2021-01-01', 8 , 3 , 7, 'Nhu','HCM','1','ben nghe','111','0123456787','chi giao gio hanh chinh');
+INSERT INTO OrderDetails (OrderID, ProductID, ProductDetailsID, quantity, unitPrice)
+VALUES (5, 2, 3, 2, 5000000),(5, 2, 4, 2, 5000000)
+
+INSERT INTO Products (productName, description, NumberOfPurchasing, status, BrandID)
+VALUES ('Jordan', 'Good', 1000, 1, 1);
+INSERT INTO ProductDetails (ProductID, color, size, stockQuantity, price, importDate, image, status)
+VALUES (2, 'WHITE', '40', 100, 5000000, '2024-07-03', 'image1', 1)
+   INSERT INTO ProductDetails (ProductID, color, size, stockQuantity, price, importDate, image, status)
+VALUES (2, 'BLACK', '40', 100, 5000000, '2024-07-03', 'image1', 1)
 
 UPDATE Orders SET status = 0 WHERE OrderID = 1
 
