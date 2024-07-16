@@ -1,4 +1,4 @@
--- Drop the database if it exists and create a new one
+﻿-- Drop the database if it exists and create a new one
 DROP DATABASE IF EXISTS github;
 CREATE DATABASE github;
 GO
@@ -38,10 +38,10 @@ CREATE TABLE Customers (
     CustID INT PRIMARY KEY,
     points INT,
     birthday DATE,
-    province_city NVARCHAR(100),
-    district NVARCHAR(100),
-    ward NVARCHAR(100),
-    detailAddress NVARCHAR(255),
+    province_city VARCHAR(100),
+    district VARCHAR(100),
+    ward VARCHAR(100),
+    detailAddress VARCHAR(255),
     FOREIGN KEY (CustID) REFERENCES Users(UserID)
 );
 GO
@@ -79,7 +79,7 @@ GO
 
 -- Create ProductDetails table
 CREATE TABLE ProductDetails (
-    ProductDetailsID INT IDENTITY(1,1) PRIMARY KEY,
+    ProductDetailsID INT PRIMARY KEY,
 	ProductID INT,
     color VARCHAR(50),
     size VARCHAR(50),
@@ -94,27 +94,32 @@ GO
 
 -- Create OverseeProducts table
 CREATE TABLE OverseeProducts (
+	HistoryID INT IDENTITY(1,1),
     EmpID INT,
     ProductID INT,
-	FieldOld VARCHAR(20),
-	[Action] VARCHAR(20),
-	FieldNew VARCHAR(20),
+	FieldOld VARCHAR(MAX),
+	[Action] VARCHAR(MAX),
+	FieldNew VARCHAR(MAX),
     PRIMARY KEY (EmpID, ProductID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+	ChangeDate DATETIME DEFAULT GETDATE()
 );
 GO
 
+drop table SuperviseEmployees
 -- Create SuperviseEmployees table
 CREATE TABLE SuperviseEmployees (
+	HistoryID INT IDENTITY(1,1),
     EmpID INT,
     SupervisorID INT,
-	FieldOld VARCHAR(20),
-	[Action] VARCHAR(20),
-	FieldNew VARCHAR(20),
+	FieldOld VARCHAR(max),
+	[Action] VARCHAR(max),
+	FieldNew VARCHAR(max),
     PRIMARY KEY (EmpID, SupervisorID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
-    FOREIGN KEY (SupervisorID) REFERENCES Employees(EmpID)
+    FOREIGN KEY (SupervisorID) REFERENCES Employees(EmpID),
+	ChangeDate DATETIME DEFAULT GETDATE()
 );
 GO
 
@@ -122,11 +127,11 @@ GO
 CREATE TABLE SuperviseCustomers (
     EmpID INT,
     CustID INT,
-	FieldOld VARCHAR(20),
-	[Action] VARCHAR(20),
-	FieldNew VARCHAR(20),
+	FieldOld VARCHAR(MAX),
+	[Action] VARCHAR(MAX),
+	FieldNew VARCHAR(MAX),
     PRIMARY KEY (EmpID, CustID),
-    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
+	FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (CustID) REFERENCES Customers(CustID)
 );
 GO
@@ -150,9 +155,6 @@ CREATE TABLE ProcessSupports (
     responseMessage VARCHAR(100),
 	title varchar(100),
     responseDate DATE,
-	-- FieldOld VARCHAR(20),
-	-- [Action] VARCHAR(20),
-	-- FieldNew VARCHAR(20),
     PRIMARY KEY (EmpID, SupportID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (SupportID) REFERENCES Supports(SupportID)
@@ -172,12 +174,10 @@ GO
 CREATE TABLE WishlistDetails (
     WishlistID INT,
     ProductID INT,
-    ProductDetailsID INT, 
     status INT,
-    PRIMARY KEY (WishlistID, ProductID, ProductDetailsID),
+    PRIMARY KEY (WishlistID, ProductID),
     FOREIGN KEY (WishlistID) REFERENCES Wishlists(WishlistID),
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
-    FOREIGN KEY (ProductDetailsID) REFERENCES ProductDetails(ProductDetailsID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 GO
 
@@ -186,10 +186,8 @@ CREATE TABLE Carts (
     CartID INT IDENTITY(1,1) PRIMARY KEY,
     totalPrice DECIMAL(10, 2), --CHange totalPrice from int to Decimal
     status INT,
-	PromotionID INT,
     CustID INT UNIQUE,
-    FOREIGN KEY (CustID) REFERENCES Customers(CustID),
-	FOREIGN KEY (promotionID) REFERENCES Promotions(PromotionID)
+    FOREIGN KEY (CustID) REFERENCES Customers(CustID)
 );
 GO
 
@@ -247,52 +245,58 @@ GO
 CREATE TABLE OrderDetails (
     OrderID INT,
     ProductID INT,
-    ProductDetailsID INT,
     quantity INT,
     unitPrice INT,
-    PRIMARY KEY (OrderID, ProductID, ProductDetailsID),
-    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
-    FOREIGN KEY (ProductDetailsID) REFERENCES ProductDetails(ProductDetailsID)
+    PRIMARY KEY (OrderID, ProductID),
+	FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
 GO
 
 -- Create ManageOrders table
 CREATE TABLE ManageOrders (
+	HistoryID INT IDENTITY(1,1),	
     OrderID INT,
     EmpID INT,
-	FieldOld VARCHAR(20),
-	[Action] VARCHAR(20),
-	FieldNew VARCHAR(20),
+	FieldOld VARCHAR(MAX),
+	[Action] VARCHAR(MAX),
+	FieldNew VARCHAR(MAX),
     PRIMARY KEY (OrderID, EmpID),
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
-    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID)
+    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
+	ChangeDate DATETIME DEFAULT GETDATE()
 );
 GO
 
 -- Create ManagePromotions table
 CREATE TABLE ManagePromotions (
+	HistoryID INT IDENTITY(1,1),
     PromotionID INT,
     EmpID INT,
-	FieldOld VARCHAR(20),
-	[Action] VARCHAR(20),
-	FieldNew VARCHAR(20),
+	FieldOld VARCHAR(MAX),
+	[Action] VARCHAR(MAX),
+	FieldNew VARCHAR(MAX),
     PRIMARY KEY (PromotionID, EmpID),
     FOREIGN KEY (PromotionID) REFERENCES Promotions(PromotionID),
-    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID)
+    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
+	ChangeDate DATETIME DEFAULT GETDATE()
 );
 GO
 
+
+drop table ManageBrands
 -- Create ManageBrands table
 CREATE TABLE ManageBrands (
+	HistoryID INT IDENTITY(1,1),
     BrandID INT,
     EmpID INT,
-	FieldOld VARCHAR(20),
-	[Action] VARCHAR(20),
-	FieldNew VARCHAR(20),
-    PRIMARY KEY (BrandID, EmpID),
+	FieldOld VARCHAR(max),
+	[Action] VARCHAR(max),
+	FieldNew VARCHAR(max),
+    PRIMARY KEY (BrandID, EmpID, HistoryID),
     FOREIGN KEY (BrandID) REFERENCES Brands(BrandID),
-    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID)
+    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
+	ChangeDate DATETIME DEFAULT GETDATE()
 );
 GO
 
@@ -318,14 +322,16 @@ GO
 
 -- Create ManageCategories table
 CREATE TABLE ManageCategories (
+	HistoryID INT IDENTITY(1,1),
     Categories INT,
     EmpID INT,
-	FieldOld VARCHAR(20),
-	[Action] VARCHAR(20),
-	FieldNew VARCHAR(20),
+	FieldOld VARCHAR(MAX),
+	[Action] VARCHAR(MAX),
+	FieldNew VARCHAR(MAX),
     PRIMARY KEY (Categories, EmpID),
     FOREIGN KEY (Categories) REFERENCES Categories(CategoryID),
-    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID)
+    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
+	ChangeDate DATETIME DEFAULT GETDATE()
 );
 GO
 
@@ -352,31 +358,23 @@ GO
 DELETE From Users where UserID = 5;
 
 SELECT * FROM Roles;
-
+SELECT * FROM Users;
 SELECT * FROM Employees;
 SELECT * FROM Customers c JOIN Users u ON c.CustID = u.UserID;
 SELECT * FROM Brands;
-SELECT * FROM Users;
-SELECT * FROM Customers;
-SELECT * FROM Products;
-
-SELECT * FROM ProductDetails;
-SELECT * FROM CartDetails;
-SELECT * FROM Carts;
-SELECT * FROM Orders;
-SELECT * FROM OrderDetails;
-SELECT * FROM Supports WHERE CustID like '%%' OR status like '%%' OR SupportID like '%%' OR requestDate like '%%' OR requestMessage like '%%';
+SELECT * FROM Products;/-strong/-heart:>:o:-((:-hSELECT * FROM Supports WHERE CustID like '%%' OR status like '%%' OR SupportID like '%%' OR requestDate like '%%' OR requestMessage like '%%';
 SELECT *  FROM Supports s 
 INNER JOIN Customers c ON s.CustID = c.CustID
 INNER JOIN Users u ON c.CustID = u.UserID
 WHERE u.userName like '%%'
-SELECT * FROM Carts WHERE CustID = 8
+
 SELECT * FROM Supports s 
 INNER JOIN Customers c ON s.CustID = c.CustID
 INNER JOIN Users u ON c.CustID = u.UserID
 WHERE s.SupportID = 1;
 SELECT * FROM Promotions;
-
+SELECT * FROM Orders;
+SELECT * FROM OrderDetails;
 SELECT * FROM Categories;
 SELECT * FROM ChildrenCategories;
 SELECT * FROM ProductBelongtoCategories;
@@ -415,8 +413,7 @@ INSERT INTO Employees (EmpID) VALUES (1);
 INSERT INTO Employees (EmpID) VALUES (2);
 INSERT INTO Employees (EmpID) VALUES (3);
 
-
-INSERT INTO Customers (CustID, points, birthday, province_city, district, ward, detailAddress) VALUES (5,0, '2000-01-01', 'HCM', '1', 'Da Kao', '123 Nguyen Dinh Chieu');
+INSERT INTO Customers (CustID, points, birthday, province_city, district, ward, detailAddress) VALUES (4,0, '2000-01-01', 'HCM', '1', 'Da Kao', '123 Nguyen Dinh Chieu');
 
 INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, description, condition) VALUES('SALE50', '2024-01-01', '2024-02-01', 50.00,'Happy Sale', 100);
 INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, description, condition) VALUES('SALE35', '2024-01-01', '2024-02-01', 35.00,'Happy Sale', 50);
@@ -424,9 +421,7 @@ INSERT INTO Promotions(promotionName, startDate, endDate, discountPer, descripti
 
 INSERT INTO Brands (BrandName, status) VALUES ('Adidas', 1);
 INSERT INTO Brands (BrandName, status) VALUES ('Nike', 1);
-INSERT INTO Brands (BrandName, status) VALUES ('Puma', 1);
-
-INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 4);
+INSERT INTO Brands (BrandName, status) VALUES ('Puma', 1);/-strong/-heart:>:o:-((:-hINSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 4);
 INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (0,'HELP', '2021-01-01', 'Help me', 7);
 INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (0,'HELP', '2021-01-01', 'Help me', 7);
 INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (0,'HELP', '2021-01-01', 'Help me', 7);
@@ -445,20 +440,13 @@ INSERT INTO Products (productName, description, NumberOfPurchasing, status, Bran
 INSERT INTO  ProcessSupports (EmpID, SupportID, title, responseMessage, responseDate) VALUES (3, 2,'SHOP REPLY YOUR SUPPORT', 'I will help you', GETDATE());
 DELETE FROM ProcessSupports WHERE EmpID = 3 AND SupportID = 1;
 
-INSERT INTO Carts (totalPrice, CustID) VALUES (10000,8);
-INSERT INTO CartDetails(CartID,ProductID,ProductDetailsID,quantity, price) VALUES (7,2,3,2,5000000),(7,2,4,1,5000000);
+INSERT INTO Carts (totalPrice, CustID) VALUES (0,7);
+SELECT * FROM Orders
+INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userName, city, district, ward, address, phone) 
+			VALUES (1, 100, '2021-01-01', 12, 3 , 2, 'Nhu','HCM','1','ben nghe','111','0123456787');
 
-INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userName, city, district, ward, address, phone, note) 
-			VALUES (1, 100, '2021-01-01', 8 , 3 , 7, 'Nhu','HCM','1','ben nghe','111','0123456787','chi giao gio hanh chinh');
-INSERT INTO OrderDetails (OrderID, ProductID, ProductDetailsID, quantity, unitPrice)
-VALUES (5, 2, 3, 2, 5000000),(5, 2, 4, 2, 5000000)
-
-INSERT INTO Products (productName, description, NumberOfPurchasing, status, BrandID)
-VALUES ('Jordan', 'Good', 1000, 1, 1);
-INSERT INTO ProductDetails (ProductID, color, size, stockQuantity, price, importDate, image, status)
-VALUES (2, 'WHITE', '40', 100, 5000000, '2024-07-03', 'image1', 1)
-   INSERT INTO ProductDetails (ProductID, color, size, stockQuantity, price, importDate, image, status)
-VALUES (2, 'BLACK', '40', 100, 5000000, '2024-07-03', 'image1', 1)
+INSERT INTO Products (productName, description, NumberOfPurchasing, status, BrandID) VALUES ('Shoes', 'Good', 0, 1, 1);
+INSERT INTO OrderDetails (orderID, productID, quantity, unitPrice) VALUES (2, 2, 1, 100) 
 
 UPDATE Orders SET status = 0 WHERE OrderID = 1
 
@@ -482,8 +470,7 @@ SELECT * FROM ProcessSupports WHERE supportID = 1
 INSERT INTO Carts()
 SELECT * FROM Customers
 INSERT INTO Supports (status, requestDate, requestMessage, CustID) VALUES (0, '2021-01-01', 'Help me', 4);
-SELECT *  FROM Supports s 
-INNER JOIN Customers c ON s.CustID = c.CustID
+SELECT *  FROM Supports s/-strong/-heart:>:o:-((:-hINNER JOIN Customers c ON s.CustID = c.CustID
 INNER JOIN Users u ON c.CustID = u.UserID
 WHERE u.userName like '%%'
 
@@ -508,6 +495,4 @@ INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userN
 SELECT * FROM Orders o 
 INNER JOIN Customers c ON o.CustID = c.CustID
 INNER JOIN Users u ON c.CustID = u.UserID
-WHERE OrderID = 2
-
-
+WHERE OrderID = 215:29/-strong/-heart:>:o:-((:-hXem trước khi gửiThả Files vào đây để xem lại trước khi gửi
