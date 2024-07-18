@@ -46,7 +46,6 @@ CREATE TABLE Customers (
 );
 GO
 
-
 CREATE TABLE PasswordRecovery (
     ResetID INT IDENTITY(1,1) PRIMARY KEY,
     UserID INT,
@@ -56,20 +55,6 @@ CREATE TABLE PasswordRecovery (
     tokenStatus INT
 );
 GO  
-
-CREATE TABLE ManageRoles (
-    HistoryID INT IDENTITY(1,1),
-    EmpID INT,
-    roleID INT,
-	FieldOld VARCHAR(MAX),
-	[Action] VARCHAR(MAX),
-	FieldNew VARCHAR(MAX),
-    PRIMARY KEY (EmpID, roleID),
-    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
-    FOREIGN KEY (roleID) REFERENCES Roles(roleID),
-	ChangeDate DATETIME DEFAULT GETDATE()
-);
-GO
 
 -- Create Brands table
 CREATE TABLE Brands (
@@ -115,7 +100,7 @@ CREATE TABLE OverseeProducts (
 	FieldOld VARCHAR(MAX),
 	[Action] VARCHAR(MAX),
 	FieldNew VARCHAR(MAX),
-    PRIMARY KEY (EmpID, ProductID),
+    PRIMARY KEY (EmpID, ProductID, HistoryID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
 	ChangeDate DATETIME DEFAULT GETDATE()
@@ -130,7 +115,7 @@ CREATE TABLE OverseeProductDetail (
 	FieldOld VARCHAR(MAX),
 	[Action] VARCHAR(MAX),
 	FieldNew VARCHAR(MAX),
-    PRIMARY KEY (EmpID, ProductDetailsID),
+    PRIMARY KEY (EmpID, ProductDetailsID, HistoryID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (ProductDetailsID) REFERENCES ProductDetails(ProductDetailsID),
 	ChangeDate DATETIME DEFAULT GETDATE()
@@ -298,7 +283,7 @@ CREATE TABLE ManageOrders (
 	FieldOld VARCHAR(MAX),
 	[Action] VARCHAR(MAX),
 	FieldNew VARCHAR(MAX),
-    PRIMARY KEY (OrderID, EmpID),
+    PRIMARY KEY (OrderID, EmpID, HistoryID),
     FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
 	ChangeDate DATETIME DEFAULT GETDATE()
@@ -313,7 +298,7 @@ CREATE TABLE ManagePromotions (
 	FieldOld VARCHAR(MAX),
 	[Action] VARCHAR(MAX),
 	FieldNew VARCHAR(MAX),
-    PRIMARY KEY (PromotionID, EmpID),
+    PRIMARY KEY (PromotionID, EmpID, HistoryID),
     FOREIGN KEY (PromotionID) REFERENCES Promotions(PromotionID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
 	ChangeDate DATETIME DEFAULT GETDATE()
@@ -364,7 +349,7 @@ CREATE TABLE ManageCategories (
 	FieldOld VARCHAR(MAX),
 	[Action] VARCHAR(MAX),
 	FieldNew VARCHAR(MAX),
-    PRIMARY KEY (Categories, EmpID),
+    PRIMARY KEY (Categories, EmpID, HistoryID),
     FOREIGN KEY (Categories) REFERENCES Categories(CategoryID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
 	ChangeDate DATETIME DEFAULT GETDATE()
@@ -379,7 +364,7 @@ CREATE TABLE ManageCDCategories (
 	FieldOld VARCHAR(MAX),
 	[Action] VARCHAR(MAX),
 	FieldNew VARCHAR(MAX),
-    PRIMARY KEY (CDCategoryID, EmpID),
+    PRIMARY KEY (CDCategoryID, EmpID, HistoryID),
     FOREIGN KEY (CDCategoryID) REFERENCES ChildrenCategories(CDCategoryID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
 	ChangeDate DATETIME DEFAULT GETDATE()
