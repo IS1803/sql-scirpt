@@ -261,16 +261,20 @@ CREATE TABLE Orders (
     promotionID INT,
     CartID INT,
     userName VARCHAR(100),
-    city VARCHAR(100), 
-    district VARCHAR(100),
-    ward VARCHAR(100),
-    address VARCHAR(100),
+    city NVARCHAR(100), 
+    district NVARCHAR(100),
+    ward NVARCHAR(100),
+    address NVARCHAR(100),
     phone INT,
     note VARCHAR(100),
     FOREIGN KEY (CustID) REFERENCES Customers(CustID),
     FOREIGN KEY (promotionID) REFERENCES Promotions(PromotionID),
     FOREIGN KEY (CartID) REFERENCES Carts(CartID)
 );
+GO
+ALTER TABLE Orders
+ALTER COLUMN city NVARCHAR(100); 
+
 GO
 
 -- Create OrderDetails table
@@ -410,7 +414,10 @@ SELECT * FROM Users;
 SELECT * FROM Employees;
 SELECT * FROM Customers c JOIN Users u ON c.CustID = u.UserID;
 SELECT * FROM Brands;
-SELECT * FROM Products;/-strong/-heart:>:o:-((:-hSELECT * FROM Supports WHERE CustID like '%%' OR status like '%%' OR SupportID like '%%' OR requestDate like '%%' OR requestMessage like '%%';
+SELECT * FROM Products;
+SELECT * FROM ProductDetails;
+
+SELECT * FROM Supports WHERE CustID like '%%' OR status like '%%' OR SupportID like '%%' OR requestDate like '%%' OR requestMessage like '%%';
 SELECT *  FROM Supports s 
 INNER JOIN Customers c ON s.CustID = c.CustID
 INNER JOIN Users u ON c.CustID = u.UserID
