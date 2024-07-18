@@ -217,7 +217,7 @@ CREATE TABLE Carts (
     CartID INT IDENTITY(1,1) PRIMARY KEY,
     totalPrice DECIMAL(10, 2), --CHange totalPrice from int to Decimal
     status INT,
-    CustID INT UNIQUE,
+    CustID INT,
 	PromotionID INT,
     FOREIGN KEY (CustID) REFERENCES Customers(CustID),
 	FOREIGN KEY (PromotionID) REFERENCES Promotions(PromotionID)
