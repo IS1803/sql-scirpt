@@ -45,7 +45,6 @@ CREATE TABLE Customers (
     FOREIGN KEY (CustID) REFERENCES Users(UserID)
 );
 GO
-
 CREATE TABLE PasswordRecovery (
     ResetID INT IDENTITY(1,1) PRIMARY KEY,
     UserID INT,
@@ -79,7 +78,7 @@ GO
 
 -- Create ProductDetails table
 CREATE TABLE ProductDetails (
-    ProductDetailsID INT PRIMARY KEY,
+    ProductDetailsID INT IDENTITY(1,1) PRIMARY KEY,
 	ProductID INT,
     color VARCHAR(50),
     size VARCHAR(50),
@@ -94,7 +93,11 @@ GO
 
 -- Create OverseeProducts table
 CREATE TABLE OverseeProducts (
+<<<<<<< Updated upstream
 	HistoryID INT IDENTITY(1,1),
+=======
+    HistoryID INT IDENTITY(1,1),
+>>>>>>> Stashed changes
     EmpID INT,
     ProductID INT,
 	FieldOld VARCHAR(MAX),
@@ -104,12 +107,31 @@ CREATE TABLE OverseeProducts (
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
 	ChangeDate DATETIME DEFAULT GETDATE()
+<<<<<<< Updated upstream
+=======
+);
+GO
+
+-- Create OverseeProducts table
+CREATE TABLE OverseeProductDetail (
+    HistoryID INT IDENTITY(1,1),
+    EmpID INT,
+    ProductDetailsID INT,
+	FieldOld VARCHAR(20),
+	[Action] VARCHAR(20),
+	FieldNew VARCHAR(20),
+    PRIMARY KEY (EmpID, ProductDetailsID),
+    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
+    FOREIGN KEY (ProductDetailsID) REFERENCES ProductDetails(ProductDetailsID),
+	ChangeDate DATETIME DEFAULT GETDATE()
+>>>>>>> Stashed changes
 );
 GO
 
 drop table SuperviseEmployees
 -- Create SuperviseEmployees table
 CREATE TABLE SuperviseEmployees (
+<<<<<<< Updated upstream
 	HistoryID INT IDENTITY(1,1),
     EmpID INT,
     SupervisorID INT,
@@ -119,13 +141,27 @@ CREATE TABLE SuperviseEmployees (
     PRIMARY KEY (EmpID, SupervisorID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (SupervisorID) REFERENCES Employees(EmpID),
+=======
+    HistoryID INT IDENTITY(1,1),
+	UserID INT,
+    EmpID INT,
+	FieldOld VARCHAR(max),
+	[Action] VARCHAR(max),
+	FieldNew VARCHAR(max),
+    PRIMARY KEY (EmpID, UserID, HistoryID),
+    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+>>>>>>> Stashed changes
 	ChangeDate DATETIME DEFAULT GETDATE()
 );
 GO
 
 -- Create SuperviseCustomers table
 CREATE TABLE SuperviseCustomers (
+    HistoryID INT IDENTITY(1,1),
+	UserID INT,
     EmpID INT,
+<<<<<<< Updated upstream
     CustID INT,
 	FieldOld VARCHAR(MAX),
 	[Action] VARCHAR(MAX),
@@ -133,6 +169,15 @@ CREATE TABLE SuperviseCustomers (
     PRIMARY KEY (EmpID, CustID),
 	FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (CustID) REFERENCES Customers(CustID)
+=======
+	FieldOld VARCHAR(max),
+	[Action] VARCHAR(max),
+	FieldNew VARCHAR(max),
+    PRIMARY KEY (EmpID, UserID, HistoryID),
+    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+	ChangeDate DATETIME DEFAULT GETDATE()
+>>>>>>> Stashed changes
 );
 GO
 
@@ -175,9 +220,11 @@ CREATE TABLE WishlistDetails (
     WishlistID INT,
     ProductID INT,
     status INT,
-    PRIMARY KEY (WishlistID, ProductID),
-    FOREIGN KEY (WishlistID) REFERENCES Wishlists(WishlistID),
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+	ProductDetailsID INT,
+	PRIMARY KEY (WishlistID, ProductID, ProductDetailsID),
+	FOREIGN KEY (WishlistID) REFERENCES Wishlists(WishlistID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+	FOREIGN KEY (ProductDetailsID) REFERENCES ProductDetails(ProductDetailsID)
 );
 GO
 
@@ -245,17 +292,29 @@ GO
 CREATE TABLE OrderDetails (
     OrderID INT,
     ProductID INT,
+	ProductDetailsID INT,
     quantity INT,
     unitPrice INT,
+<<<<<<< Updated upstream
     PRIMARY KEY (OrderID, ProductID),
 	FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+=======
+	PRIMARY KEY (OrderID, ProductID, ProductDetailsID),
+	FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
+	FOREIGN KEY (ProductDetailsID) REFERENCES ProductDetails(ProductDetailsID)
+>>>>>>> Stashed changes
 );
 GO
 
 -- Create ManageOrders table
 CREATE TABLE ManageOrders (
+<<<<<<< Updated upstream
 	HistoryID INT IDENTITY(1,1),	
+=======
+    HistoryID INT IDENTITY(1,1),	
+>>>>>>> Stashed changes
     OrderID INT,
     EmpID INT,
 	FieldOld VARCHAR(MAX),
@@ -270,7 +329,11 @@ GO
 
 -- Create ManagePromotions table
 CREATE TABLE ManagePromotions (
+<<<<<<< Updated upstream
 	HistoryID INT IDENTITY(1,1),
+=======
+    HistoryID INT IDENTITY(1,1),
+>>>>>>> Stashed changes
     PromotionID INT,
     EmpID INT,
 	FieldOld VARCHAR(MAX),
@@ -287,7 +350,11 @@ GO
 drop table ManageBrands
 -- Create ManageBrands table
 CREATE TABLE ManageBrands (
+<<<<<<< Updated upstream
 	HistoryID INT IDENTITY(1,1),
+=======
+    HistoryID INT IDENTITY(1,1),
+>>>>>>> Stashed changes
     BrandID INT,
     EmpID INT,
 	FieldOld VARCHAR(max),
@@ -322,7 +389,11 @@ GO
 
 -- Create ManageCategories table
 CREATE TABLE ManageCategories (
+<<<<<<< Updated upstream
 	HistoryID INT IDENTITY(1,1),
+=======
+    HistoryID INT IDENTITY(1,1),
+>>>>>>> Stashed changes
     Categories INT,
     EmpID INT,
 	FieldOld VARCHAR(MAX),
@@ -332,6 +403,24 @@ CREATE TABLE ManageCategories (
     FOREIGN KEY (Categories) REFERENCES Categories(CategoryID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
 	ChangeDate DATETIME DEFAULT GETDATE()
+<<<<<<< Updated upstream
+=======
+);
+GO
+
+-- Create ManageCDCategories table
+CREATE TABLE ManageCDCategories (
+    HistoryID INT IDENTITY(1,1),
+    CDCategoryID INT,
+    EmpID INT,
+	FieldOld VARCHAR(20),
+	[Action] VARCHAR(20),
+	FieldNew VARCHAR(20),
+    PRIMARY KEY (CDCategoryID, EmpID),
+    FOREIGN KEY (CDCategoryID) REFERENCES ChildrenCategories(CDCategoryID),
+    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
+	ChangeDate DATETIME DEFAULT GETDATE()
+>>>>>>> Stashed changes
 );
 GO
 
@@ -431,7 +520,7 @@ INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALU
 INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 7);
 INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 7);
 DELETE FROM Supports
-INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'HELP', '2021-01-01', 'Help me', 8);
+INSERT INTO [Supports] (status, title, requestDate, requestMessage, CustID) VALUES (1,'TEST', '2021-01-01', 'Help me', 8);
 
 
 INSERT INTO Products (productName, description, NumberOfPurchasing, status, BrandID) VALUES ('Shoes', 'Good', 0, 1, 1);
