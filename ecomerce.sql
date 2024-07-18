@@ -232,7 +232,9 @@ CREATE TABLE Carts (
     totalPrice DECIMAL(10, 2), --CHange totalPrice from int to Decimal
     status INT,
     CustID INT UNIQUE,
-    FOREIGN KEY (CustID) REFERENCES Customers(CustID)
+	PromotionID INT,
+    FOREIGN KEY (CustID) REFERENCES Customers(CustID),
+	FOREIGN KEY (PromotionID) REFERENCES Promotions(PromotionID)
 );
 GO
 
@@ -271,10 +273,6 @@ CREATE TABLE Orders (
     FOREIGN KEY (promotionID) REFERENCES Promotions(PromotionID),
     FOREIGN KEY (CartID) REFERENCES Carts(CartID)
 );
-GO
-ALTER TABLE Orders
-ALTER COLUMN city NVARCHAR(100); 
-
 GO
 
 -- Create OrderDetails table
@@ -411,6 +409,7 @@ DELETE From Users where UserID = 5;
 
 SELECT * FROM Roles;
 SELECT * FROM Users;
+SELECT * FROM Carts WHERE CustID = 3 AND status = 1
 SELECT * FROM Employees;
 SELECT * FROM Customers c JOIN Users u ON c.CustID = u.UserID;
 SELECT * FROM Brands;
