@@ -1,4 +1,4 @@
-﻿-- Drop the database if it exists and create a new one
+-- Drop the database if it exists and create a new one
 DROP DATABASE IF EXISTS github;
 CREATE DATABASE github;
 GO
@@ -439,6 +439,11 @@ INSERT INTO Products (productName, description, NumberOfPurchasing, status, Bran
 
 INSERT INTO  ProcessSupports (EmpID, SupportID, title, responseMessage, responseDate) VALUES (3, 2,'SHOP REPLY YOUR SUPPORT', 'I will help you', GETDATE());
 DELETE FROM ProcessSupports WHERE EmpID = 3 AND SupportID = 1;
+SELECT * FROM CartDetails
+DELETE FROM Carts WHERE CustID = 5
+DELETE FROM CartDetails WHERE 
+INSERT INTO Carts (totalPrice, CustID) VALUES (10000,5);
+INSERT INTO CartDetails(CartID,ProductID,ProductDetailsID,quantity, price) VALUES (2,2,3,2,5000000),(2,2,4,1,5000000);
 
 INSERT INTO Carts (totalPrice, CustID) VALUES (0,7);
 SELECT * FROM Orders
@@ -447,9 +452,13 @@ INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userN
 
 INSERT INTO Products (productName, description, NumberOfPurchasing, status, BrandID) VALUES ('Shoes', 'Good', 0, 1, 1);
 INSERT INTO OrderDetails (orderID, productID, quantity, unitPrice) VALUES (2, 2, 1, 100) 
+INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userName, city, district, ward, address, phone, note) 
+			VALUES (1, 100, '2021-01-01', 8 , 3 , 7, 'Nhu','HCM','1','ben nghe','111','0123456787','chi giao gio hanh chinh');
+INSERT INTO OrderDetails (OrderID, ProductID, ProductDetailsID, quantity, unitPrice)
+VALUES (5, 2, 3, 2, 5000000),(5, 2, 4, 2, 5000000)
 
 UPDATE Orders SET status = 0 WHERE OrderID = 1
-
+SELECT * FROM Products
 -- ALTER TABLE Products
 -- ALTER COLUMN status int;
 -- ALTER TABLE Products
@@ -495,4 +504,9 @@ INSERT INTO Orders (status, total, orderDate, CustID, promotionID, CartID, userN
 SELECT * FROM Orders o 
 INNER JOIN Customers c ON o.CustID = c.CustID
 INNER JOIN Users u ON c.CustID = u.UserID
-WHERE OrderID = 215:29/-strong/-heart:>:o:-((:-hXem trước khi gửiThả Files vào đây để xem lại trước khi gửi
+WHERE OrderID = 2
+
+SELECT * FROM Promotions
+INSERT INTO Promotions (promotionName, startDate, endDate, discountPer, description, condition) VALUES ('SALE50', '2024-01-01', '2024-02-01', 50.00,'Happy Sale', 100);
+INSERT INTO Promotions (promotionName, startDate, endDate, discountPer, description, condition) VALUES ('NOSALE', '2024-01-01', '2024-02-01', 0.00,'Happy Sale', 100);
+
