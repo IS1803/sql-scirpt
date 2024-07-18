@@ -38,13 +38,14 @@ CREATE TABLE Customers (
     CustID INT PRIMARY KEY,
     points INT,
     birthday DATE,
-    province_city VARCHAR(100),
-    district VARCHAR(100),
-    ward VARCHAR(100),
+    province_city NVARCHAR(100),
+    district NVARCHAR(100),
+    ward NVARCHAR(100),
     detailAddress VARCHAR(255),
     FOREIGN KEY (CustID) REFERENCES Users(UserID)
 );
 GO
+
 
 CREATE TABLE PasswordRecovery (
     ResetID INT IDENTITY(1,1) PRIMARY KEY,
