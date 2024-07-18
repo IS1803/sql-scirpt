@@ -45,6 +45,7 @@ CREATE TABLE Customers (
     FOREIGN KEY (CustID) REFERENCES Users(UserID)
 );
 GO
+
 CREATE TABLE PasswordRecovery (
     ResetID INT IDENTITY(1,1) PRIMARY KEY,
     UserID INT,
@@ -54,6 +55,20 @@ CREATE TABLE PasswordRecovery (
     tokenStatus INT
 );
 GO  
+
+CREATE TABLE ManageRoles (
+    HistoryID INT IDENTITY(1,1),
+    EmpID INT,
+    roleID INT,
+	FieldOld VARCHAR(MAX),
+	[Action] VARCHAR(MAX),
+	FieldNew VARCHAR(MAX),
+    PRIMARY KEY (EmpID, roleID),
+    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
+    FOREIGN KEY (roleID) REFERENCES Roles(roleID),
+	ChangeDate DATETIME DEFAULT GETDATE()
+);
+GO
 
 -- Create Brands table
 CREATE TABLE Brands (
@@ -93,11 +108,7 @@ GO
 
 -- Create OverseeProducts table
 CREATE TABLE OverseeProducts (
-<<<<<<< Updated upstream
 	HistoryID INT IDENTITY(1,1),
-=======
-    HistoryID INT IDENTITY(1,1),
->>>>>>> Stashed changes
     EmpID INT,
     ProductID INT,
 	FieldOld VARCHAR(MAX),
@@ -107,8 +118,6 @@ CREATE TABLE OverseeProducts (
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
 	ChangeDate DATETIME DEFAULT GETDATE()
-<<<<<<< Updated upstream
-=======
 );
 GO
 
@@ -117,31 +126,17 @@ CREATE TABLE OverseeProductDetail (
     HistoryID INT IDENTITY(1,1),
     EmpID INT,
     ProductDetailsID INT,
-	FieldOld VARCHAR(20),
-	[Action] VARCHAR(20),
-	FieldNew VARCHAR(20),
+	FieldOld VARCHAR(MAX),
+	[Action] VARCHAR(MAX),
+	FieldNew VARCHAR(MAX),
     PRIMARY KEY (EmpID, ProductDetailsID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (ProductDetailsID) REFERENCES ProductDetails(ProductDetailsID),
 	ChangeDate DATETIME DEFAULT GETDATE()
->>>>>>> Stashed changes
 );
 GO
 
-drop table SuperviseEmployees
--- Create SuperviseEmployees table
 CREATE TABLE SuperviseEmployees (
-<<<<<<< Updated upstream
-	HistoryID INT IDENTITY(1,1),
-    EmpID INT,
-    SupervisorID INT,
-	FieldOld VARCHAR(max),
-	[Action] VARCHAR(max),
-	FieldNew VARCHAR(max),
-    PRIMARY KEY (EmpID, SupervisorID),
-    FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
-    FOREIGN KEY (SupervisorID) REFERENCES Employees(EmpID),
-=======
     HistoryID INT IDENTITY(1,1),
 	UserID INT,
     EmpID INT,
@@ -151,7 +146,6 @@ CREATE TABLE SuperviseEmployees (
     PRIMARY KEY (EmpID, UserID, HistoryID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
->>>>>>> Stashed changes
 	ChangeDate DATETIME DEFAULT GETDATE()
 );
 GO
@@ -161,15 +155,6 @@ CREATE TABLE SuperviseCustomers (
     HistoryID INT IDENTITY(1,1),
 	UserID INT,
     EmpID INT,
-<<<<<<< Updated upstream
-    CustID INT,
-	FieldOld VARCHAR(MAX),
-	[Action] VARCHAR(MAX),
-	FieldNew VARCHAR(MAX),
-    PRIMARY KEY (EmpID, CustID),
-	FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
-    FOREIGN KEY (CustID) REFERENCES Customers(CustID)
-=======
 	FieldOld VARCHAR(max),
 	[Action] VARCHAR(max),
 	FieldNew VARCHAR(max),
@@ -177,7 +162,6 @@ CREATE TABLE SuperviseCustomers (
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (UserID) REFERENCES Users(UserID),
 	ChangeDate DATETIME DEFAULT GETDATE()
->>>>>>> Stashed changes
 );
 GO
 
@@ -203,6 +187,20 @@ CREATE TABLE ProcessSupports (
     PRIMARY KEY (EmpID, SupportID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
     FOREIGN KEY (SupportID) REFERENCES Supports(SupportID)
+);
+GO
+
+-- Create Promotions table
+CREATE TABLE Promotions (
+    PromotionID INT IDENTITY(1,1) PRIMARY KEY,
+    promotionName VARCHAR(100),
+    startDate DATE,
+    endDate DATE,
+    discountPer DECIMAL(5, 2),
+	description varchar(100),
+	image VARCHAR(MAX),
+    condition INT,
+	status INT
 );
 GO
 
@@ -252,19 +250,6 @@ CREATE TABLE CartDetails (
 );
 GO
 
--- Create Promotions table
-CREATE TABLE Promotions (
-    PromotionID INT IDENTITY(1,1) PRIMARY KEY,
-    promotionName VARCHAR(100),
-    startDate DATE,
-    endDate DATE,
-    discountPer DECIMAL(5, 2),
-	description varchar(100),
-	image VARCHAR(MAX),
-    condition INT,
-	status INT
-);
-GO
 
 -- Create Orders table
 CREATE TABLE Orders (
@@ -295,26 +280,16 @@ CREATE TABLE OrderDetails (
 	ProductDetailsID INT,
     quantity INT,
     unitPrice INT,
-<<<<<<< Updated upstream
-    PRIMARY KEY (OrderID, ProductID),
-	FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
-    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
-=======
 	PRIMARY KEY (OrderID, ProductID, ProductDetailsID),
 	FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
     FOREIGN KEY (ProductID) REFERENCES Products(ProductID),
 	FOREIGN KEY (ProductDetailsID) REFERENCES ProductDetails(ProductDetailsID)
->>>>>>> Stashed changes
 );
 GO
 
 -- Create ManageOrders table
 CREATE TABLE ManageOrders (
-<<<<<<< Updated upstream
 	HistoryID INT IDENTITY(1,1),	
-=======
-    HistoryID INT IDENTITY(1,1),	
->>>>>>> Stashed changes
     OrderID INT,
     EmpID INT,
 	FieldOld VARCHAR(MAX),
@@ -329,11 +304,7 @@ GO
 
 -- Create ManagePromotions table
 CREATE TABLE ManagePromotions (
-<<<<<<< Updated upstream
-	HistoryID INT IDENTITY(1,1),
-=======
     HistoryID INT IDENTITY(1,1),
->>>>>>> Stashed changes
     PromotionID INT,
     EmpID INT,
 	FieldOld VARCHAR(MAX),
@@ -347,14 +318,9 @@ CREATE TABLE ManagePromotions (
 GO
 
 
-drop table ManageBrands
 -- Create ManageBrands table
 CREATE TABLE ManageBrands (
-<<<<<<< Updated upstream
 	HistoryID INT IDENTITY(1,1),
-=======
-    HistoryID INT IDENTITY(1,1),
->>>>>>> Stashed changes
     BrandID INT,
     EmpID INT,
 	FieldOld VARCHAR(max),
@@ -389,11 +355,7 @@ GO
 
 -- Create ManageCategories table
 CREATE TABLE ManageCategories (
-<<<<<<< Updated upstream
 	HistoryID INT IDENTITY(1,1),
-=======
-    HistoryID INT IDENTITY(1,1),
->>>>>>> Stashed changes
     Categories INT,
     EmpID INT,
 	FieldOld VARCHAR(MAX),
@@ -403,8 +365,6 @@ CREATE TABLE ManageCategories (
     FOREIGN KEY (Categories) REFERENCES Categories(CategoryID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
 	ChangeDate DATETIME DEFAULT GETDATE()
-<<<<<<< Updated upstream
-=======
 );
 GO
 
@@ -413,14 +373,13 @@ CREATE TABLE ManageCDCategories (
     HistoryID INT IDENTITY(1,1),
     CDCategoryID INT,
     EmpID INT,
-	FieldOld VARCHAR(20),
-	[Action] VARCHAR(20),
-	FieldNew VARCHAR(20),
+	FieldOld VARCHAR(MAX),
+	[Action] VARCHAR(MAX),
+	FieldNew VARCHAR(MAX),
     PRIMARY KEY (CDCategoryID, EmpID),
     FOREIGN KEY (CDCategoryID) REFERENCES ChildrenCategories(CDCategoryID),
     FOREIGN KEY (EmpID) REFERENCES Employees(EmpID),
 	ChangeDate DATETIME DEFAULT GETDATE()
->>>>>>> Stashed changes
 );
 GO
 
